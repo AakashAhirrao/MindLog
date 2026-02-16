@@ -15,7 +15,7 @@ public class MindLogApp {
             System.out.println("1. New Thought ✍️");
             System.out.println("2. View History 📖");
             System.out.println("3. Exit 🚪");
-            System.out.println("Choice: ");
+            System.out.print("Choice: ");
             String input = sc.nextLine();
 
             switch (input) {
@@ -30,7 +30,7 @@ public class MindLogApp {
 
     private static void handleWrite() {
 
-        System.out.println("Category (Work, Personal, Idea): ");
+        System.out.print("Category (Work, Personal, Idea): ");
         String cat = sc.nextLine();
         System.out.println("Enter your thoughts below.");
         System.out.println("(Type \"Q\" on the next line and press enter to save)");
