@@ -15,7 +15,7 @@ public class SqlJournalService implements JournalService{
             stmt.setString(2, thought.getContent());
 
             stmt.executeUpdate();
-//            System.out.println("Thought saved to MySQL! ");
+            System.out.println("Thought saved to MySQL! ");
         }
         catch (SQLException e){
             System.err.println("Error saving thought: " + e.getMessage());
