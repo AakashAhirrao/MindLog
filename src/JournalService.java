@@ -1,3 +1,5 @@
+import java.util.List;
+
 public interface JournalService {
 
     // Create: Takes a Thought object and saves it to the database
