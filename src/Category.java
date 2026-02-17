@@ -1,4 +1,3 @@
-public class Category {
 
     public enum Category {
         WORK,
@@ -7,4 +6,4 @@ public class Category {
         FITNESS,
         IMPORTANT
     }
-}
+
