@@ -3,18 +3,18 @@ import java.time.LocalDateTime;
 public class Thought {
 
     private int id;
-    private String category;
+    private Category category;
     private String content;
     private LocalDateTime date;
 
 
-    public Thought(String category, String content){
+    public Thought(Category category, String content){
         this.category = category;
         this.content = content;
         this.date = LocalDateTime.now();
     }
 
-    public Thought(int id, String category, String content, LocalDateTime date){
+    public Thought(int id, Category category, String content, LocalDateTime date){
         this.id = id;
         this.category = category;
         this.content = content;
@@ -23,7 +23,7 @@ public class Thought {
 
     public int getId() {return id;}
 
-    public String getCategory() {return category;}
+    public Category getCategory() {return category;}
 
     public String getContent() {return content;}
 
