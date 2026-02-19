@@ -3,8 +3,8 @@ import java.util.List;
 
 public class MindLogApp {
 
-    private static JournalService journal = new SqlJournalService();
-    private static Scanner sc = new Scanner(System.in);
+    private static final JournalService journal = new SqlJournalService();
+    private static final Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
 
@@ -30,8 +30,20 @@ public class MindLogApp {
 
     private static void handleWrite() {
 
-        System.out.print("Category (Work, Personal, Idea): ");
-        String cat = sc.nextLine();
+        System.out.println("Select Category: ");
+        System.out.println("1. Work | 2. Personal | 3. Idea | 4. Fitness | 5. Important");
+        System.out.print("Choice: ");
+
+        String input = sc.nextLine();
+        int choice = Integer.parseInt(input);
+        Category selectedCat = switch (choice) {
+            case 1 -> Category.WORK;
+            case 2 -> Category.PERSONAL;
+            case 4 -> Category.FITNESS;
+            default -> Category.IDEA;
+        };
+
+//        String cat = sc.nextLine();
         System.out.println("Enter your thoughts below.");
         System.out.println("(Type \"Q\" on the next line and press enter to save)");
         System.out.println("-------------------------------------------------------");
@@ -53,7 +65,7 @@ public class MindLogApp {
             System.out.println("Thought was empty. Nothing saved.");
         }
         else {
-            Thought t = new Thought(cat, msg);
+            Thought t = new Thought(selectedCat, msg);
             journal.addEntry(t);
 //            System.out.println("Saved to Database!");
         }
@@ -63,7 +75,7 @@ public class MindLogApp {
         List<Thought> entries = journal.getAllEntries();
         System.out.println("\n---- YOUR JOURNAL ENTRIES ----");
         for (Thought t : entries) {
-            System.out.println("ID: " + t.getId() + " | Category: " + t.getCategory());
+            System.out.println("ID: " + t.getId() + " | Category: " + t.getCategory().getPrettyName());
             System.out.println("Content: " + t.getContent());
             System.out.println("------------------------------------");
         }

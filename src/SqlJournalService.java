@@ -11,7 +11,7 @@ public class SqlJournalService implements JournalService{
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)){
 
-            stmt.setString(1, thought.getCategory());
+            stmt.setString(1, thought.getCategory().name());
             stmt.setString(2, thought.getContent());
 
             stmt.executeUpdate();
@@ -35,7 +35,7 @@ public class SqlJournalService implements JournalService{
                      // Returning each row from database to Thought object
                      Thought t = new Thought(
                              rs.getInt("id"),
-                             rs.getString("category"),
+                             Category.valueOf(rs.getString("category").toUpperCase()),
                              rs.getString("content"),
                              rs.getTimestamp("created_at").toLocalDateTime()
                      );
