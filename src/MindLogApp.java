@@ -14,7 +14,8 @@ public class MindLogApp {
             System.out.println("\n===MIND LOG===");
             System.out.println("1. New Thought ✍️");
             System.out.println("2. View History 📖");
-            System.out.println("3. Exit 🚪");
+            System.out.println("3. Search with word 🔍");
+            System.out.println("4. Exit 🚪");
             System.out.print("Choice: ");
             String input = sc.nextLine();
 
@@ -22,7 +23,8 @@ public class MindLogApp {
 
                 case "1" -> handleWrite();
                 case "2" -> handleRead();
-                case "3" -> running = false;
+                case "3" -> handleSearch();
+                case "4" -> running = false;
                 default -> System.out.println("Try again!");
             }
         }
@@ -32,15 +34,17 @@ public class MindLogApp {
 
         System.out.println("Select Category: ");
         System.out.println("1. Work | 2. Personal | 3. Idea | 4. Fitness | 5. Important");
-        System.out.print("Choice: ");
+        System.out.print("Choice (Enter Number): ");
 
         String input = sc.nextLine();
         int choice = Integer.parseInt(input);
         Category selectedCat = switch (choice) {
             case 1 -> Category.WORK;
             case 2 -> Category.PERSONAL;
+            case 3 -> Category.IDEA;
             case 4 -> Category.FITNESS;
-            default -> Category.IDEA;
+            case 5 -> Category.IMPORTANT;
+            default -> Category.PERSONAL;
         };
 
 //        String cat = sc.nextLine();
@@ -78,6 +82,24 @@ public class MindLogApp {
             System.out.println("ID: " + t.getId() + " | Category: " + t.getCategory().getPrettyName());
             System.out.println("Content: " + t.getContent());
             System.out.println("------------------------------------");
+        }
+    }
+
+    private static void handleSearch() {
+        System.out.print("Enter keyword to search: ");
+        String keyword = sc.nextLine();
+
+        List<Thought> results = journal.searchEntries(keyword);
+
+        if (results.isEmpty()){
+            System.out.println("🔍 No thoughts found containing: " + keyword);
+        }
+        else {
+            System.out.println("🔍 Found " +results.size()+" matches: ");
+            for (Thought t : results){
+                System.out.println("[" + t.getCategory().getPrettyName() + "] "+t.getContent());
+                System.out.println("---------------------------------------");
+            }
         }
     }
 }

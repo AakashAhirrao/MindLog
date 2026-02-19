@@ -49,7 +49,34 @@ public class SqlJournalService implements JournalService{
     }
 
     @Override public List<Thought> getEntriesByCategory(String c) { return new ArrayList<>();}
-    @Override public List<Thought> searchEntries(String k) {return new ArrayList<>();}
+    @Override public List<Thought> searchEntries(String keyword) {
+        List<Thought> result = new ArrayList<>();
+
+        String sql = "SELECT * FROM thoughts WHERE content LIKE ? OR category LIKE ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            String query = "%"+keyword+"%";
+            stmt.setString(1, query);
+            stmt.setString(2, query);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                result.add(new Thought(
+                        rs.getInt("id"),
+                        Category.valueOf(rs.getString("category").toUpperCase()),
+                        rs.getString("content"),
+                        rs.getTimestamp("created_at").toLocalDateTime()
+                ));
+            }
+        } catch (SQLException e){
+            System.out.println("Search error: "+e.getMessage());
+        }
+
+        return result;
+    }
     @Override public void updateEntry(int id, String text) { }
     @Override public void deleteEntry(int id) { }
 }
