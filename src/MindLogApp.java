@@ -16,7 +16,8 @@ public class MindLogApp {
             System.out.println("2. View History 📖");
             System.out.println("3. Search with word 🔍");
             System.out.println("4. Search with category 🔍");
-            System.out.println("5. Exit 🚪");
+            System.out.println("5. Update Existing records 📝");
+            System.out.println("6. Exit 🚪");
             System.out.print("Choice: ");
             String input = sc.nextLine();
 
@@ -26,10 +27,28 @@ public class MindLogApp {
                 case "2" -> handleRead();
                 case "3" -> handleSearch();
                 case "4" -> handleFilter();
-                case "5" -> running = false;
+                case "5" -> handleUpdate();
+                case "6" -> running = false;
                 default -> System.out.println("Try again!");
             }
         }
+    }
+
+    private static String captureMultiLineInput(Scanner sc){
+        StringBuilder sb =  new StringBuilder();
+        while (true) {
+            String line = sc.nextLine();
+
+            if (line.equalsIgnoreCase("Q")){
+                break;
+            }
+
+            sb.append(line).append(System.lineSeparator());
+        }
+
+        String msg = sb.toString().trim();
+
+        return msg;
     }
 
     private static void handleWrite() {
@@ -54,18 +73,7 @@ public class MindLogApp {
         System.out.println("(Type \"Q\" on the next line and press enter to save)");
         System.out.println("-------------------------------------------------------");
 
-        StringBuilder sb =  new StringBuilder();
-        while (true) {
-            String line = sc.nextLine();
-
-            if (line.equalsIgnoreCase("Q")){
-                break;
-            }
-
-            sb.append(line).append(System.lineSeparator());
-        }
-
-        String msg = sb.toString().trim();
+        String msg = captureMultiLineInput(sc);
 
         if (msg.isEmpty()){
             System.out.println("Thought was empty. Nothing saved.");
@@ -137,6 +145,25 @@ public class MindLogApp {
         }
         catch (NumberFormatException e){
             System.out.println("Invalid input, return to menu.q");
+        }
+    }
+
+    private static void handleUpdate() {
+
+        System.out.print("Enter ID of record you want to update: ");
+        try {
+            int id = Integer.parseInt(sc.nextLine());
+            System.out.println("Enter the new content (Q on a new line to save):");
+            String newContent = captureMultiLineInput(sc);
+
+            if(!newContent.isEmpty()){
+                journal.updateEntry(id, newContent);
+            } else {
+                System.out.println("Update cancelled, content was empty");
+            }
+        }
+        catch (NumberFormatException e){
+            System.out.println("Invalid ID format");
         }
     }
 }

@@ -103,6 +103,28 @@ public class SqlJournalService implements JournalService{
 
         return result;
     }
-    @Override public void updateEntry(int id, String text) { }
+    @Override public void updateEntry(int id, String newContent) {
+
+        String sql = "UPDATE thoughts SET content = ? WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, newContent);
+            stmt.setInt(2, id);
+
+            int rowsAffected = stmt.executeUpdate();
+
+            if (rowsAffected > 0){
+                System.out.println("Thought #" +id+ " updated successfully!");
+            }
+            else {
+                System.out.println("No thought found with ID: "+id);
+            }
+        }
+        catch (SQLException e){
+            System.out.println("Update Error: "+e.getMessage());
+        }
+    }
     @Override public void deleteEntry(int id) { }
 }
