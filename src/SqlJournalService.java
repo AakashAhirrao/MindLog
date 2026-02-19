@@ -48,7 +48,33 @@ public class SqlJournalService implements JournalService{
         return list;
     }
 
-    @Override public List<Thought> getEntriesByCategory(String c) { return new ArrayList<>();}
+    @Override public List<Thought> getEntriesByCategory(Category category) {
+
+        List<Thought> results = new ArrayList<>();
+
+        String sql = "SELECT * FROM thoughts WHERE category = ? ORDER BY created_at DESC";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, category.name());
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()){
+                results.add(new Thought(
+                        rs.getInt("id"),
+                        Category.valueOf(rs.getString("category").toUpperCase()),
+                        rs.getString("content"),
+                        rs.getTimestamp("created_at").toLocalDateTime()
+                ));
+            }
+        } catch (SQLException e){
+            System.out.println("Filtering error: "+e.getMessage());
+        }
+        return results;
+    }
+
     @Override public List<Thought> searchEntries(String keyword) {
         List<Thought> result = new ArrayList<>();
 

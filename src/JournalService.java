@@ -9,7 +9,7 @@ public interface JournalService {
     List<Thought> getAllEntries();
 
     // Search: Returns only thoughts that match a specific category (e.g., "Work")
-    List<Thought> getEntriesByCategory(String category);
+    List<Thought> getEntriesByCategory(Category category);
 
     // Search: Returns thoughts containing a specific word (e.g., "Coffee")
     List<Thought> searchEntries(String keyword);
