@@ -1,3 +1,5 @@
+import java.sql.SQLOutput;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.List;
 
@@ -17,7 +19,8 @@ public class MindLogApp {
             System.out.println("3. Search with word 🔍");
             System.out.println("4. Search with category 🔍");
             System.out.println("5. Update Existing records 📝");
-            System.out.println("6. Exit 🚪");
+            System.out.println("6. Delete Existing records ✂️");
+            System.out.println("7. Exit 🚪");
             System.out.print("Choice: ");
             String input = sc.nextLine();
 
@@ -28,7 +31,8 @@ public class MindLogApp {
                 case "3" -> handleSearch();
                 case "4" -> handleFilter();
                 case "5" -> handleUpdate();
-                case "6" -> running = false;
+                case "6" -> handleDelete();
+                case "7" -> running = false;
                 default -> System.out.println("Try again!");
             }
         }
@@ -170,5 +174,39 @@ public class MindLogApp {
         catch (NumberFormatException e){
             System.out.println("Invalid ID format");
         }
+    }
+
+    private static void handleDelete() {
+
+        try {
+            System.out.print("Enter ID of thought you want to delete: ");
+            int id = Integer.parseInt(sc.nextLine());
+
+            if (!journal.existsId(id)) {
+                System.out.println("ID not found, try again!");
+                return;
+            }
+
+            while (true) {
+                System.out.print("\nAre sure you want to delete thought #" + id + " ? (Y/N): ");
+                String confirm = sc.nextLine();
+
+                if (confirm.equalsIgnoreCase("Y")) {
+                    journal.deleteEntry(id);
+                    System.out.println("Thought #" + id + " successfully deleted!");
+                    break;
+                } else if (confirm.equalsIgnoreCase("N")) {
+                    System.out.println("Delete cancelled!");
+                    break;
+                } else {
+                    System.out.println("Enter 'Y' for yes and 'N' for no, try again!");
+                }
+            }
+        } catch (NoSuchElementException e){
+            System.out.println("Field was empty, enter existing ID for deletion");
+        } catch (NumberFormatException e){
+            System.out.println("Please enter a valid ID number for deletion");
+        }
+
     }
 }

@@ -1,3 +1,4 @@
+import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -126,7 +127,20 @@ public class SqlJournalService implements JournalService{
             System.out.println("Update Error: "+e.getMessage());
         }
     }
-    @Override public void deleteEntry(int id) { }
+    @Override public void deleteEntry(int id) {
+
+        String sql = "DELETE FROM thoughts WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        }
+        catch (SQLException e){
+            System.out.println("Error in deletion: "+e.getMessage());
+        }
+    }
 
     @Override public boolean existsId(int id){
 
