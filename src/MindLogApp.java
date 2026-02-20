@@ -153,7 +153,12 @@ public class MindLogApp {
         System.out.print("Enter ID of record you want to update: ");
         try {
             int id = Integer.parseInt(sc.nextLine());
-            System.out.println("Enter the new content (Q on a new line to save):");
+
+            if (!journal.existsId(id)){                     // Checking if ID exists first or not
+                System.out.println("ID not found, try again!!!");
+                return;
+            }
+            System.out.println("ID found!, Enter the new content (Q on a new line to save):");
             String newContent = captureMultiLineInput(sc);
 
             if(!newContent.isEmpty()){

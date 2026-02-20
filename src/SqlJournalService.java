@@ -127,4 +127,24 @@ public class SqlJournalService implements JournalService{
         }
     }
     @Override public void deleteEntry(int id) { }
+
+    @Override public boolean existsId(int id){
+
+        String sql = "SELECT COUNT(*) FROM thoughts WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if(rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        }
+        catch (SQLException e){
+            System.out.println("Database check error: "+e.getMessage());
+        }
+        return false;
+    }
 }

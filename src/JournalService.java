@@ -19,4 +19,6 @@ public interface JournalService {
 
     // Delete: Removes a thought forever based on its ID
     void deleteEntry(int id);
+
+    boolean existsId (int id);
 }
