@@ -21,6 +21,10 @@ public class Thought {
         this.date = date;
     }
 
+    public Thought() {
+
+    }
+
     public int getId() {return id;}
 
     public Category getCategory() {return category;}
