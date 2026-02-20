@@ -1,4 +1,3 @@
-import java.sql.SQLOutput;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.List;
@@ -38,7 +37,7 @@ public class MindLogApp {
         }
     }
 
-    private static String captureMultiLineInput(Scanner sc){
+    private static String captureMultiLineInput(){
         StringBuilder sb =  new StringBuilder();
         while (true) {
             String line = sc.nextLine();
@@ -50,9 +49,7 @@ public class MindLogApp {
             sb.append(line).append(System.lineSeparator());
         }
 
-        String msg = sb.toString().trim();
-
-        return msg;
+        return sb.toString().trim();
     }
 
     private static void handleWrite() {
@@ -72,12 +69,11 @@ public class MindLogApp {
             default -> Category.PERSONAL;
         };
 
-//        String cat = sc.nextLine();
         System.out.println("Enter your thoughts below.");
         System.out.println("(Type \"Q\" on the next line and press enter to save)");
         System.out.println("-------------------------------------------------------");
 
-        String msg = captureMultiLineInput(sc);
+        String msg = captureMultiLineInput();
 
         if (msg.isEmpty()){
             System.out.println("Thought was empty. Nothing saved.");
@@ -163,7 +159,7 @@ public class MindLogApp {
                 return;
             }
             System.out.println("ID found!, Enter the new content (Q on a new line to save):");
-            String newContent = captureMultiLineInput(sc);
+            String newContent = captureMultiLineInput();
 
             if(!newContent.isEmpty()){
                 journal.updateEntry(id, newContent);
