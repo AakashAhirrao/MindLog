@@ -1,12 +1,17 @@
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class Thought {
 
     private int id;
     private Category category;
     private String content;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime date;
 
+
+    public Thought() {
+    }
 
     public Thought(Category category, String content){
         this.category = category;
@@ -19,10 +24,6 @@ public class Thought {
         this.category = category;
         this.content = content;
         this.date = date;
-    }
-
-    public Thought() {
-
     }
 
     public int getId() {return id;}
