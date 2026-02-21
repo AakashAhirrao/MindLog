@@ -15,10 +15,10 @@ public class UserService {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, username);
-            stmt.setString(2, rawPassword);
+            stmt.setString(2, hashedPassword);
             stmt.executeUpdate();
 
-//            System.out.println("New user registered!");
+            System.out.println("New user registered!");
             return true;
         } catch (SQLException e){
             System.out.println("Username already taken!!!");

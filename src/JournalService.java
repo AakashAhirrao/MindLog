@@ -22,5 +22,5 @@ public interface JournalService {
 
     boolean existsId (int id);
 
-    List<Thought> getPagedEntries(int limit, int offset);
+    List<Thought> getPagedEntries(int userId, int limit, int offset);
 }

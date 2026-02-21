@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class Thought {
 
     private int id;
+    private int userId;
     private Category category;
     private String content;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -33,4 +34,8 @@ public class Thought {
     public String getContent() {return content;}
 
     public LocalDateTime getDate() {return date;}
+
+    public int getUserId() {return userId;};
+
+    public void setUserId(int userId) {this.userId = userId;};
 }

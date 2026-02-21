@@ -1,5 +1,10 @@
 const API_URL = "http://localhost:7070/thoughts";
 
+const myUserId = localStorage.getItem('mindlog_user_id');
+if (!myUserId) {
+    window.location.href = "/login.html";
+}
+
 let currentOffset = 0;
 const LIMIT = 5;
 let currentKeyword = ""; // We need to remember the search term for pagination!
@@ -12,7 +17,7 @@ async function loadThoughts(append = false, keyword = "") {
     }
 
     // Build the URL with pagination
-    let url = `${API_URL}?limit=${LIMIT}&offset=${currentOffset}`;
+    let url = `${API_URL}?userId=${myUserId}&limit=${LIMIT}&offset=${currentOffset}`;
     // If there is a search word, add it to the URL
     if (currentKeyword) {
         url += `&keyword=${encodeURIComponent(currentKeyword)}`;
@@ -55,9 +60,13 @@ async function loadThoughts(append = false, keyword = "") {
 }
 
 // 2. Save a new thought (The missing piece!)
+// 2. Save a new thought
 document.getElementById('saveBtn').addEventListener('click', async () => {
     const content = document.getElementById('thoughtContent').value;
     const category = document.getElementById('categorySelect').value;
+
+    // Grab your ID from the browser's memory!
+    const myUserId = localStorage.getItem('mindlog_user_id');
 
     if (!content.trim()) {
         alert("Write something first!");
@@ -67,12 +76,17 @@ document.getElementById('saveBtn').addEventListener('click', async () => {
     const response = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content, category })
+        // NEW STUFF: We added 'userId: myUserId' to the package we send to Java!
+        body: JSON.stringify({
+            userId: myUserId,
+            content: content,
+            category: category
+        })
     });
 
     if (response.ok) {
-        document.getElementById('thoughtContent').value = ""; // Clear the text box
-        loadThoughts(); // Reload the feed from the top
+        document.getElementById('thoughtContent').value = ""; // Clear text box
+        loadThoughts(); // Reload the feed
     }
 });
 
