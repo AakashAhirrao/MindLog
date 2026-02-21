@@ -17,12 +17,16 @@ public class MindLogServer {
 
         // 2. Tell Javalin to use this "Date-Smart" mapper by default
         JavalinJackson.defaultMapper();
+
+        String portStr = System.getenv("PORT");
+        int port = (portStr != null) ? Integer.parseInt(portStr) : 7070;
+
         // 3. Start the serve
         var app = Javalin.create(config -> {
             config.staticFiles.add("/public");
-        }).start(7070);
+        }).start(port);
 
-        System.out.println("🚀 MindLog Web Server is running on http://localhost:7070");
+        System.out.println("🚀 Server started on port: "+port);
 
         app.post("/register", ctx -> { // REGISTER GATE
             // 1. Catch the JSON envelope
