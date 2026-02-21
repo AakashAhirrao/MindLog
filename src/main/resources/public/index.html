@@ -10,9 +10,10 @@
 <body>
 
 <nav>
-    <h1>MindLog</h1>
-    <div class="search-bar">
+    <div class="nav-empty"></div> <h1>MindLog</h1>
+    <div class="search-container" id="searchContainer">
         <input type="text" id="searchInput" placeholder="Search thoughts...">
+        <button id="searchIconBtn" class="icon-btn">🔍</button>
     </div>
 </nav>
 
@@ -30,8 +31,9 @@
         </div>
     </section>
 
-    <section id="thoughtsContainer" class="feed">
-    </section>
+    <section id="thoughtsContainer" class="feed"></section>
+    <button id="loadMoreBtn" class="load-more-btn">Show More</button>
+<!--    </section>-->
 </main>
 
 <script src="script.js"></script>

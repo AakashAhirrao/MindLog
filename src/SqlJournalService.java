@@ -160,4 +160,31 @@ public class SqlJournalService implements JournalService{
         }
         return false;
     }
+
+    @Override
+    public List<Thought> getPagedEntries(int limit, int offset) {
+        List<Thought> results = new ArrayList<>();
+        // LIMIT = amount to fetch | OFFSET = amount to skip
+        String sql = "SELECT * FROM thoughts ORDER BY created_at DESC LIMIT ? OFFSET ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, limit);
+            stmt.setInt(2, offset);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                results.add(new Thought(
+                        rs.getInt("id"),
+                        Category.valueOf(rs.getString("category").toUpperCase()),
+                        rs.getString("content"),
+                        rs.getTimestamp("created_at").toLocalDateTime()
+                ));
+            }
+        } catch (SQLException e) {
+            System.err.println("Pagination error: " + e.getMessage());
+        }
+        return results;
+    }
 }

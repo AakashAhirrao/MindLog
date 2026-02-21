@@ -25,16 +25,20 @@ public class MindLogServer {
 
         // --- READ: Get all thoughts ---
         app.get("/thoughts", ctx -> {
-
             String keyword = ctx.queryParam("keyword");
+
+            // Javalin 6 way: get the param, if null, use the default string
+            String limitStr = ctx.queryParam("limit");
+            String offsetStr = ctx.queryParam("offset");
+
+            int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 5;
+            int offset = (offsetStr != null) ? Integer.parseInt(offsetStr) : 0;
 
             if (keyword != null && !keyword.isEmpty()) {
                 ctx.json(journal.searchEntries(keyword));
             } else {
-                ctx.json(journal.getAllEntries());
+                ctx.json(journal.getPagedEntries(limit, offset));
             }
-//            List<Thought> thoughts = journal.getAllEntries();
-//            ctx.json(thoughts);
         });
 
         // --- CREATE: Add a new thought --
