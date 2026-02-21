@@ -16,7 +16,7 @@ public class MindLogServer {
 
         // 2. Tell Javalin to use this "Date-Smart" mapper by default
         JavalinJackson.defaultMapper();
-        // 3. Start the server
+        // 3. Start the serve
         var app = Javalin.create(config -> {
             config.staticFiles.add("/public");
         }).start(7070);
