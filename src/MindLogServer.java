@@ -8,6 +8,8 @@ public class MindLogServer {
     // Using your existing service
     public static JournalService journal = new SqlJournalService();
 
+    public static UserService userService = new UserService();
+
     public static void main(String[] args) {
         // 1. Set up the JSON tool to handle Java Dates (LocalDateTime)
         ObjectMapper objectMapper = new ObjectMapper();
