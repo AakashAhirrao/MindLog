@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:7070";
+const API_URL = "";
 
 let isLoginMode = true; // Tracks if we are logging in or signing up
 

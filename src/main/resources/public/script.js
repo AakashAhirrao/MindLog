@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:7070/thoughts";
+const API_URL = "/thoughts";
 
 const myUserId = localStorage.getItem('mindlog_user_id');
 if (!myUserId) {
