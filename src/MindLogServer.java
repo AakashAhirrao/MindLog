@@ -2,7 +2,6 @@ import io.javalin.Javalin;
 import io.javalin.json.JavalinJackson;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import java.util.List;
 
 public class MindLogServer {
 
@@ -10,7 +9,7 @@ public class MindLogServer {
     public static JournalService journal = new SqlJournalService();
 
     public static void main(String[] args) {
-        // 1. Setup the JSON tool to handle Java Dates (LocalDateTime)
+        // 1. Set up the JSON tool to handle Java Dates (LocalDateTime)
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
 
