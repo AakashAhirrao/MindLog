@@ -17,7 +17,9 @@ public class MindLogServer {
         // 2. Tell Javalin to use this "Date-Smart" mapper by default
         JavalinJackson.defaultMapper();
         // 3. Start the server
-        var app = Javalin.create().start(7070);
+        var app = Javalin.create(config -> {
+            config.staticFiles.add("/public");
+        }).start(7070);
 
         System.out.println("🚀 MindLog Web Server is running on http://localhost:7070");
 
