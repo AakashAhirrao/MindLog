@@ -137,3 +137,16 @@ document.addEventListener('click', (e) => {
 
 // Initial Load when page opens
 loadThoughts();
+
+// --- 6. LOG OUT LOGIC ---
+document.getElementById('logoutBtn').addEventListener('click', () => {
+    // 1. Ask for confirmation
+    if (!confirm("Are you sure you want to log out?")) return;
+
+    // 2. Wipe the ID from the browser's memory!
+    localStorage.removeItem('mindlog_user_id');
+    localStorage.removeItem('mindlog_username');
+
+    // 3. Send them back to the login screen
+    window.location.href = "/login.html";
+});

@@ -41,11 +41,30 @@ h1 {
     grid-column: 2; /* Forces Title to center */
 }
 
-.search-container {
-    grid-column: 3; /* Forces Search to right */
+/* Update the container holding both search and logout */
+.nav-controls {
+    grid-column: 3;
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    gap: 10px; /* Puts a little space between the magnifying glass and the door */
+}
+
+/* We don't want grid-column on search-container anymore, because nav-controls handles it now! */
+.search-container {
+    display: flex;
+    align-items: center;
+}
+
+/* Make the door icon look clickable */
+.logout-icon {
+    font-size: 1.4rem;
+    transition: 0.3s;
+}
+
+.logout-icon:hover {
+    transform: translateX(3px); /* Gently slides to the right when hovered */
+    opacity: 0.8;
 }
 
 .search-container input {
