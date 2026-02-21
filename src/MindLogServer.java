@@ -16,7 +16,6 @@ public class MindLogServer {
 
         // 2. Tell Javalin to use this "Date-Smart" mapper by default
         JavalinJackson.defaultMapper();
-
         // 3. Start the server
         var app = Javalin.create().start(7070);
 
@@ -24,8 +23,16 @@ public class MindLogServer {
 
         // --- READ: Get all thoughts ---
         app.get("/thoughts", ctx -> {
-            List<Thought> thoughts = journal.getAllEntries();
-            ctx.json(thoughts);
+
+            String keyword = ctx.queryParam("keyword");
+
+            if (keyword != null && !keyword.isEmpty()) {
+                ctx.json(journal.searchEntries(keyword));
+            } else {
+                ctx.json(journal.getAllEntries());
+            }
+//            List<Thought> thoughts = journal.getAllEntries();
+//            ctx.json(thoughts);
         });
 
         // --- CREATE: Add a new thought --
@@ -43,6 +50,32 @@ public class MindLogServer {
                 ctx.result("Deleted thought #" + id);
             } else {
                 ctx.status(404).result("Thought not found");
+            }
+        });
+
+        // READ by Category: e.g., /thoughts/category/fitness
+        app.get("/thoughts/category/{name}", ctx -> {
+            try {
+                // Convert the URL text (like "work") into our Enum (WORK)
+                Category cat = Category.valueOf(ctx.pathParam("name").toUpperCase());
+                ctx.json(journal.getEntriesByCategory(cat));
+            } catch (IllegalArgumentException e) {
+                ctx.status(400).result("Invalid category! Use: WORK, PERSONAL, IDEA, or FITNESS");
+            }
+        });
+
+        // UPDATE: Change an existing thought
+        app.put("/thoughts/{id}", ctx -> {
+            int id = Integer.parseInt(ctx.pathParam("id"));
+
+            if (journal.existsId(id)) {
+                // Grab the new content from the request body
+                Thought updatedData = ctx.bodyAsClass(Thought.class);
+
+                journal.updateEntry(id, updatedData.getContent());
+                ctx.result("Thought #" + id + " updated successfully!");
+            } else {
+                ctx.status(404).result("Cannot update: Thought not found.");
             }
         });
     }
