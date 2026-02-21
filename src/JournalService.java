@@ -21,4 +21,6 @@ public interface JournalService {
     void deleteEntry(int id);
 
     boolean existsId (int id);
+
+    List<Thought> getPagedEntries(int limit, int offset);
 }

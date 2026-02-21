@@ -2,7 +2,6 @@ import io.javalin.Javalin;
 import io.javalin.json.JavalinJackson;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import java.util.List;
 
 public class MindLogServer {
 
@@ -10,13 +9,13 @@ public class MindLogServer {
     public static JournalService journal = new SqlJournalService();
 
     public static void main(String[] args) {
-        // 1. Setup the JSON tool to handle Java Dates (LocalDateTime)
+        // 1. Set up the JSON tool to handle Java Dates (LocalDateTime)
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
 
         // 2. Tell Javalin to use this "Date-Smart" mapper by default
         JavalinJackson.defaultMapper();
-        // 3. Start the server
+        // 3. Start the serve
         var app = Javalin.create(config -> {
             config.staticFiles.add("/public");
         }).start(7070);
@@ -25,16 +24,20 @@ public class MindLogServer {
 
         // --- READ: Get all thoughts ---
         app.get("/thoughts", ctx -> {
-
             String keyword = ctx.queryParam("keyword");
+
+            // Javalin 6 way: get the param, if null, use the default string
+            String limitStr = ctx.queryParam("limit");
+            String offsetStr = ctx.queryParam("offset");
+
+            int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 5;
+            int offset = (offsetStr != null) ? Integer.parseInt(offsetStr) : 0;
 
             if (keyword != null && !keyword.isEmpty()) {
                 ctx.json(journal.searchEntries(keyword));
             } else {
-                ctx.json(journal.getAllEntries());
+                ctx.json(journal.getPagedEntries(limit, offset));
             }
-//            List<Thought> thoughts = journal.getAllEntries();
-//            ctx.json(thoughts);
         });
 
         // --- CREATE: Add a new thought --

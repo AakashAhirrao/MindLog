@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindLog | Aesthetic Journal</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<nav>
+    <div class="nav-empty"></div> <h1>MindLog</h1>
+    <div class="search-container" id="searchContainer">
+        <input type="text" id="searchInput" placeholder="Search thoughts...">
+        <button id="searchIconBtn" class="icon-btn">🔍</button>
+    </div>
+</nav>
+
+<main>
+    <section class="input-area">
+        <textarea id="thoughtContent" placeholder="What's on your mind?"></textarea>
+        <div class="controls">
+            <select id="categorySelect">
+                <option value="PERSONAL">Personal</option>
+                <option value="WORK">Work</option>
+                <option value="IDEA">Idea</option>
+                <option value="FITNESS">Fitness</option>
+            </select>
+            <button id="saveBtn">Log Thought</button>
+        </div>
+    </section>
+
+    <section id="thoughtsContainer" class="feed"></section>
+    <button id="loadMoreBtn" class="load-more-btn">Show More</button>
+<!--    </section>-->
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
