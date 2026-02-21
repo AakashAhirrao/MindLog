@@ -1,19 +1,40 @@
 import io.javalin.Javalin;
+import io.javalin.json.JavalinJackson;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.util.List;
 
 public class MindLogServer {
 
+    // Using your existing service
     public static JournalService journal = new SqlJournalService();
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
+        // 1. Setup the JSON tool to handle Java Dates (LocalDateTime)
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
 
-        var app = Javalin.create().start(7070);
+        // 2. Tell Javalin to use this "Date-Smart" mapper by default
+        JavalinJackson.defaultMapper();
+        // 3. Start the server
+        var app = Javalin.create(config -> {
+            config.staticFiles.add("/public");
+        }).start(7070);
 
-//        System.out.println("🚀 MindLog Web Server is running on http://localhost:7070");
+        System.out.println("🚀 MindLog Web Server is running on http://localhost:7070");
 
+        // --- READ: Get all thoughts ---
         app.get("/thoughts", ctx -> {
-           List<Thought> thoughts = journal.getAllEntries();
-           ctx.json(thoughts);
+
+            String keyword = ctx.queryParam("keyword");
+
+            if (keyword != null && !keyword.isEmpty()) {
+                ctx.json(journal.searchEntries(keyword));
+            } else {
+                ctx.json(journal.getAllEntries());
+            }
+//            List<Thought> thoughts = journal.getAllEntries();
+//            ctx.json(thoughts);
         });
 
         // --- CREATE: Add a new thought --
@@ -49,4 +70,15 @@ public class MindLogServer {
         app.put("/thoughts/{id}", ctx -> {
             int id = Integer.parseInt(ctx.pathParam("id"));
 
+            if (journal.existsId(id)) {
+                // Grab the new content from the request body
+                Thought updatedData = ctx.bodyAsClass(Thought.class);
+
+                journal.updateEntry(id, updatedData.getContent());
+                ctx.result("Thought #" + id + " updated successfully!");
+            } else {
+                ctx.status(404).result("Cannot update: Thought not found.");
+            }
+        });
+    }
 }
